@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       					   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       					   http://www.springframework.org/schema/data/mongo
+          				   http://www.springframework.org/schema/data/mongo/spring-mongo-1.2.xsd
+       					   http://www.springframework.org/schema/context 
+       					   http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	
+	
+	<!-- Scan components for annotations within the configured package -->
+	<context:component-scan base-package="com.kuyun.ad.bean">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.context.annotation.Configuration" />
+	</context:component-scan>
+	
+	<mongo:mongo host="${mongo.adindex.host}" port="${mongo.adindex.port}"></mongo:mongo>
+
+	<!-- 安全操作类模式 -->
+	<bean id="safe_mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="mongo" />
+		<constructor-arg value="ad_index" />
+		<property name="writeConcern" value="safe" />
+	</bean>
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="mongo" />
+		<constructor-arg value="ad_index" />
+	</bean>
+
+</beans>
